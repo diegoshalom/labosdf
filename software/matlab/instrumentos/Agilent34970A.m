@@ -82,7 +82,7 @@ CHAN=nan(Ndata,1);
 for inddata=1:Ndata
     %query one data value
     str=query(mux,'DATA:REMOVE? 1');
-    data=sscanf(str,'%f C,%f,%f');
+    data=sscanf(str,'%f,%f,%f');
     %data(1) contains the measurement 
     %data(2) contains the time from the scan start
     %data(3) contains the number of channel
