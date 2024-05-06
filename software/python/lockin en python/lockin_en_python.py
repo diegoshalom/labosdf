@@ -2,7 +2,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from numpy.fft import fft
-from scipy.signal import butter,filtfilt
+from scipy.signal import butter,lfilter
 
 Fs = 100000;           #[Hz ] Sampling frequency                    
 T = 1/Fs;              #[s] Sampling period       
@@ -75,7 +75,7 @@ def butter_lowpass_filter(data, cutoff, fs, order):
     normal_cutoff = cutoff / nyq
     # Get the filter coefficients 
     b, a = butter(order, normal_cutoff, btype='low', analog=False)
-    y = filtfilt(b, a, data)
+    y = lfilter(b, a, data)
     return y
 
 # Filter requirements.
