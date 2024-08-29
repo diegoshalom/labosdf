@@ -31,12 +31,12 @@ def trackTemplate(vs, template, limites):
     min_x, max_x, min_y, max_y = limites
     im = im[min_y:max_y, min_x:max_x, :]
     im = np.mean(im, axis=2)
-    im = np.asarray(im, int)
+    im = np.asarray(im, uint8)
     
     # Lee el template y lo trackea. Devuelve como posición la esquina superior izquierda.
     template = cv2.imread(template)
     template = np.mean(template, axis=2)
-    template = np.asarray(template, int)
+    template = np.asarray(template, uint8)
     res = cv2.matchTemplate(im, template, cv2.TM_CCOEFF)
     top_left = cv2.minMaxLoc(res)[3]
     

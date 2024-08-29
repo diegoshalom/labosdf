@@ -15,7 +15,7 @@ for device in system.devices:
 #para setear (y preguntar) el modo y rango de un canal analógico
 with nidaqmx.Task() as task:
     ai_channel = task.ai_channels.add_ai_voltage_chan("Dev1/ai1",max_val=10,min_val=-10)
-    print(ai_channel.ai_term_cfg)    
+    print(ai_channel.ai_term_cfg)    # puede ser DIFF o DIFFERENTIAL
     print(ai_channel.ai_max)
     print(ai_channel.ai_min)	
 	
@@ -24,7 +24,7 @@ with nidaqmx.Task() as task:
 def medicion_una_vez(duracion, fs):
     cant_puntos = int(duracion*fs)
     with nidaqmx.Task() as task:
-        modo= nidaqmx.constants.TerminalConfiguration.DIFFERENTIAL
+        modo= nidaqmx.constants.TerminalConfiguration.DIFFERENTIAL # puede ser DIFF o DIFFERENTIAL 
         task.ai_channels.add_ai_voltage_chan("Dev1/ai1", terminal_config = modo)
                
         task.timing.cfg_samp_clk_timing(fs,samps_per_chan = cant_puntos,
@@ -46,7 +46,7 @@ plt.show()
 def medicion_continua(duracion, fs):
     cant_puntos = int(duracion*fs)
     with nidaqmx.Task() as task:
-        modo= nidaqmx.constants.TerminalConfiguration.DIFFERENTIAL
+        modo= nidaqmx.constants.TerminalConfiguration.DIFFERENTIAL # puede ser DIFF o DIFFERENTIAL 
         task.ai_channels.add_ai_voltage_chan("Dev1/ai1", terminal_config = modo)
         task.timing.cfg_samp_clk_timing(fs, sample_mode = nidaqmx.constants.AcquisitionType.CONTINUOUS)
         task.start()
