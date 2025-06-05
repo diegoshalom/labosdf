@@ -71,17 +71,17 @@ class Agilent34970A:
         
         data = self._mux.query_ascii_values('READ?')
         data2 = np.transpose(np.reshape(np.array(data), (self.nChannels, 8) ) )
-        temp = data2[0]
-        tim = np.array(data2[1:7], dtype=np.int32)
-        tim = [datetime.datetime(x[0], x[1], x[2], x[3], x[4], x[5]).timestamp() for x in np.transpose(tim)]        
-        chan = data2[7]
+        temperatura = data2[0]
+        tiempo = np.array(data2[1:7])
+        tiempo = [datetime.datetime(int(x[0]), int(x[1]), int(x[2]), int(x[3]), int(x[4]), int(x[5]), int((x[5] % 1)*1000000)).timestamp() for x in np.transpose(tiempo)]          
+        canal = data2[7]
         
-        return data,temp,tim,chan
+        return data, temperatura, tiempo, canal
 
 #Ejemplo comunicacion Multiplexor Difusividad térmica
 from instrumental import Agilent34970A
 mux = Agilent34970A('GPIB0::9::INSTR')
-data,temp,tim,chan = mux.one_scan()
-print(tim)
-print(temp)
-print(chan)
+data, temperatura, tiempo, canal = mux.one_scan()
+print(tiempo)
+print(temperatura)
+print(canal)
