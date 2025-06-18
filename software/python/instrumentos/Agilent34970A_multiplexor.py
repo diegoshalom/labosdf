@@ -6,9 +6,10 @@ Manual P (pdf): https://github.com/diegoshalom/labosdf/blob/master/manuales/Agil
 Manual P (chm original): https://github.com/diegoshalom/labosdf/blob/master/manuales/Agilent34970a%20command%20reference.chm
 """
 
-import visa
+import pyvisa as visa
 import time
 import datetime
+import numpy as np
 
 class Agilent34970A:
     """Clase para el manejo multiplexor Agilent34970A usando PyVISA de interfaz
