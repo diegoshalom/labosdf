@@ -1,5 +1,5 @@
 # NI-DAQmx Python Documentation: https://nidaqmx-python.readthedocs.io/en/latest/index.html
-# NI USB-621x User Manual: https://www.ni.com/pdf/manuals/371931f.pdf
+# NI USB-621x User Manual: https://www.ni.com/docs/en-US/bundle/usb-621x-manual/resource/usb-621x-manual.pdf
 import matplotlib.pyplot as plt
 import numpy as np
 import nidaqmx
@@ -112,6 +112,38 @@ def daq_conteo(duracion):
 
 duracion = 10 # segundos
 y = daq_conteo(duracion)
+plt.plot(y)
+plt.grid()
+plt.show()
+
+## Medición con trigger
+# Pinout: 
+# NiUSB6210 
+# PFI0: 1
+# D GND: 5 o 11
+from nidaqmx.constants import AcquisitionType, Edge
+
+def medicion__una_vez_con_trigger(duracion, fs):
+    cant_puntos = int(duracion*fs)
+    with nidaqmx.Task() as task:
+        # Canal analógico a medir
+        modo= nidaqmx.constants.TerminalConfiguration.DIFFERENTIAL # puede ser DIFF o DIFFERENTIAL PREGUNTAR
+        task.ai_channels.add_ai_voltage_chan("Dev1/ai1", terminal_config = modo)
+   
+        # Configuración de muestreo
+        task.timing.cfg_samp_clk_timing(rate=fs, sample_mode=AcquisitionType.FINITE, samps_per_chan=cant_puntos)
+   
+        # Configurar trigger digital
+        task.triggers.start_trigger.cfg_dig_edge_start_trig(trigger_source="/Dev1/PFI0", trigger_edge=Edge.RISING)
+   
+        task.start()
+        datos = task.read(number_of_samples_per_channel=cant_puntos)
+    datos = np.asarray(datos)
+    return datos
+
+duracion = 1 #segundos
+fs = 250000 #Frecuencia de muestreo
+y = medicion__una_vez_con_trigger(duracion, fs)
 plt.plot(y)
 plt.grid()
 plt.show()
